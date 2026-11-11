@@ -16,8 +16,14 @@ SkillSwap is a simple, responsive MERN stack web application built for peer-to-p
 FSD Project/
 ├── backend/
 │   ├── node_modules/
+│   ├── routes/
+│   │   ├── auth.js
+│   │   ├── requests.js
+│   │   └── skills.js
 │   ├── .env
 │   ├── .env.example
+│   ├── middleware.js
+│   ├── models.js
 │   ├── package.json
 │   └── server.js
 ├── frontend/
@@ -25,6 +31,21 @@ FSD Project/
 │   ├── public/
 │   ├── src/
 │   │   ├── assets/
+│   │   ├── components/
+│   │   │   ├── Footer.jsx
+│   │   │   ├── Navbar.jsx
+│   │   │   ├── RequestModal.jsx
+│   │   │   └── SkillCard.jsx
+│   │   ├── pages/
+│   │   │   ├── AddSkillPage.jsx
+│   │   │   ├── DashboardPage.jsx
+│   │   │   ├── ExploreSkillsPage.jsx
+│   │   │   ├── HomePage.jsx
+│   │   │   ├── LoginPage.jsx
+│   │   │   ├── ProfilePage.jsx
+│   │   │   ├── RegisterPage.jsx
+│   │   │   └── RequestsPage.jsx
+│   │   ├── api.js
 │   │   ├── App.css
 │   │   ├── App.jsx
 │   │   ├── index.css
@@ -87,7 +108,7 @@ Open **http://localhost:5173** in your browser.
 
 ---
 
-## REST API Endpoints (`backend/server.js`)
+## REST API Endpoints (`backend/routes/`)
 
 | Category | Method | Endpoint | Description |
 | :--- | :--- | :--- | :--- |
@@ -113,22 +134,22 @@ Open **http://localhost:5173** in your browser.
 ## Full Stack Development Syllabus Concepts Mapped
 
 ### Express.js & Backend
-- **Express Routing & HTTP Methods:** Implemented `GET`, `POST`, `PUT`, and `DELETE` endpoints in `backend/server.js`.
+- **Express Routing & HTTP Methods:** Implemented `GET`, `POST`, `PUT`, and `DELETE` endpoints across `backend/routes/auth.js`, `backend/routes/skills.js`, and `backend/routes/requests.js`, mounted in `backend/server.js`.
 - **Route Parameters:** `req.params.id` used in `GET /api/skills/:id`, `PUT /api/skills/:id`, `DELETE /api/skills/:id`, and `PUT /api/requests/:id`.
 - **Query Parameters:** `req.query` (`search`, `category`, `sort`, `limit`, `mine`) used in `GET /api/skills` and `GET /api/requests`.
-- **Middleware:** Built-in `express.json()`, third-party `cors()`, `cookieParser()`, `express-session`, custom request logger middleware, and `requireAuth` route-protection middleware.
+- **Middleware:** Built-in `express.json()`, third-party `cors()`, `cookieParser()`, `express-session`, custom request logger middleware in `backend/server.js`, and `requireAuth` route-protection middleware in `backend/middleware.js`.
 - **Cookies & Sessions:** `express-session` stores `req.session.userId` with HTTP-only session cookie `connect.sid`, and `cookie-parser` reads/sets the `skillswap_user` cookie.
 - **Authentication:** `bcryptjs` hashes passwords before saving and compares hashed passwords on login.
 
 ### MongoDB & Mongoose
 - **Connectivity:** `mongoose.connect(MONGO_URI, { dbName: 'skillswap' })`.
-- **Schemas & References:** `User`, `Skill` (`userId` ref `'User'`), and `Request` (`senderId`, `receiverId` ref `'User'`).
+- **Schemas & References:** `User`, `Skill` (`userId` ref `'User'`), and `Request` (`senderId`, `receiverId` ref `'User'`) defined in `backend/models.js`.
 - **CRUD Operations:** `create()`, `find()`, `findById()`, `findByIdAndUpdate()`, `save()`, `findByIdAndDelete()`.
 - **Queries, Sorting & Limiting:** Regex search (`$or`), category filter, `.sort({ skillName: 1 })`, `.limit(3)` for Featured Skills, and `.populate()` to join student details.
 - **Aggregation:** `GET /api/dashboard` uses `Skill.aggregate([{ $match }, { $count }])` and `Request.aggregate([{ $match }, { $group }])` to calculate dashboard statistics.
 
-### React.js & Frontend (`frontend/src/App.jsx`)
-- **JSX & Functional Components:** `Navbar`, `Footer`, `SkillCard`, `RequestModal`, `HomePage`, `RegisterPage`, `LoginPage`, `DashboardPage`, `AddSkillPage`, `ExploreSkillsPage`, `RequestsPage`, `ProfilePage`.
+### React.js & Frontend (`frontend/src/`)
+- **JSX & Functional Components:** Reusable components in `src/components/` (`Navbar`, `Footer`, `SkillCard`, `RequestModal`) and pages in `src/pages/` (`HomePage`, `RegisterPage`, `LoginPage`, `DashboardPage`, `AddSkillPage`, `ExploreSkillsPage`, `RequestsPage`, `ProfilePage`).
 - **Props & State:** Data passed via props (`skill`, `currentUser`, `onRequestClick`, `onLoginSuccess`) and managed with `useState`.
 - **React Hooks (`useState`, `useEffect`):** Session check on mount, fetching skills, dashboard aggregation, debounced search, and requests loading.
 - **Conditional Rendering & Lists:** Auth-aware navigation, empty states, status badges, and `.map()` rendering for skill cards and exchange requests.
